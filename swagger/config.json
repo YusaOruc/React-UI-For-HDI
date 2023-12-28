@@ -1,0 +1,9 @@
+{
+  "withInterfaces": true,
+  "typescriptThreePlus": true,
+  "useSingleRequestParameter": true,
+  "withoutRuntimeChecks": false,
+  "stringEnums": true,
+  "platform": "browser",
+  "fileContentDataType": "Blob"
+}

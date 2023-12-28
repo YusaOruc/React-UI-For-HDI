@@ -20,7 +20,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "api": "java -Xmx1g -jar ./swagger/openapi-generator-cli-6.6.0.jar generate -i https://localhost:7178/swagger/v1/swagger.json -g typescript-fetch  --skip-validate-spec -o ./src/api"
   },
   "eslintConfig": {
     "extends": [
