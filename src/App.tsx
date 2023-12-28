@@ -1,24 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
-interface ITest {
-  sayi:number
-}
-function Test(props:ITest) {
-  const{sayi}=props
-  return (
-    <p>
-   {sayi}
-  </p>
-  );
-}
+import { Route, Routes, useNavigate } from "react-router-dom";
+import Login from "./views/login/Login";
+import "./App.css";
+import Home from "./views/home/Home";
+import { useEffect } from "react";
+import useHasAuthentication from "./hooks/useHasAuthentication";
 
 function App() {
+  const hasAuthentication = useHasAuthentication();
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!hasAuthentication) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   return (
-    <div className="App">
-     <Test sayi={5}/>
-    </div>
+    <Routes>
+      <Route path={"/login"} element={<Login />} />
+      {hasAuthentication && <Route path={"/home"} element={<Home />} />}
+    </Routes>
   );
 }
 
