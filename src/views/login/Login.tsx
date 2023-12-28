@@ -25,7 +25,7 @@ import { TextField } from "mui-rff";
     const defaultOnSubmit = async (d:any) => {
         try {
           sessionStorage.setItem("token", "Bearer Test");
-          navigate("/home")
+          navigate("/survey")
 
           return undefined;
         } catch (e: any) {

@@ -4,6 +4,9 @@ import "./App.css";
 import Home from "./views/home/Home";
 import { useEffect } from "react";
 import useHasAuthentication from "./hooks/useHasAuthentication";
+import Layout from "./layout/Layout";
+import Survey from "./views/survey/Survey";
+import Report from "./views/report/Report";
 
 function App() {
   const hasAuthentication = useHasAuthentication();
@@ -18,7 +21,12 @@ function App() {
   return (
     <Routes>
       <Route path={"/login"} element={<Login />} />
-      {hasAuthentication && <Route path={"/home"} element={<Home />} />}
+      {hasAuthentication && (
+        <Route path="/" element={<Layout />}>
+          <Route path={"/survey"} element={<Survey />} />
+          <Route path={"/report"} element={<Report />} />
+        </Route>
+      )}
     </Routes>
   );
 }
