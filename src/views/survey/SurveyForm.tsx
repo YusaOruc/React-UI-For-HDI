@@ -8,6 +8,7 @@ import {
   Paper,
   Stack,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import arrayMutators from "final-form-arrays";
@@ -105,10 +106,10 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                             justifyContent: "space-between",
                           }}
                         >
-                          <Chip
-                            color="success"
-                            label={`${anketQuestionIndex + 1}.Soru`}
-                          />
+                         
+                          <Typography>
+                            {`${anketQuestionIndex + 1}.Soru`}
+                          </Typography>
                           <IconButton
                             size="small"
                             onClick={() => fields.remove(anketQuestionIndex)}
@@ -198,7 +199,7 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                           <TextField
                             name={`${partName}.title`}
                             type="text"
-                            label={"Bölüm Adı"}
+                            label={"Başlık"}
                             fullWidth
                             required
                             size="small"
@@ -229,17 +230,17 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                           {({ fields, meta: { error, submitFailed } }) =>
                             fields.map(
                               (partQuestionName, partQuestionIndex) => (
-                                <Stack spacing={2} key={partQuestionName}>
+                                <Paper sx={{p:2}}  key={partQuestionName}>
+                                <Stack spacing={2}>
                                   <Box
                                     sx={{
                                       display: "flex",
                                       justifyContent: "space-between",
                                     }}
                                   >
-                                    <Chip
-                                      color="success"
-                                      label={`${partQuestionIndex + 1}.Soru`}
-                                    />
+                                    <Typography>
+                                    {`${partQuestionIndex + 1}.Soru`}
+                                    </Typography>
                                     <IconButton
                                       size="small"
                                       onClick={() =>
@@ -319,6 +320,7 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                                     
                                   </FieldArray>
                                 </Stack>
+                                </Paper>
                               )
                             )
                           }
