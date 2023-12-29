@@ -1,8 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "react-query";
+import useGetUserInfoFromSession from "../hooks/useGetTokenFromSession";
 
 const API_BASE_URL = "https://localhost:7178/api/authModule/Auth";
 
-const getAuthToken = () => {};
+
+
 interface LoginData {
   username: string;
   password: string;
@@ -10,32 +12,50 @@ interface LoginData {
 
 export const useLoginUser = () => {
   return useMutation(async (d: LoginData) => {
-    const response = await fetch(`${API_BASE_URL}/login?username=Anketor&password=Anketor`, {
+    const response = await fetch(`${API_BASE_URL}/login?username=${d.username}&password=${d.password}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-    //   body: JSON.stringify({
-    //     username: d.username,
-    //     password: d.password,
-    //   }),
     });
-    console.log(response,"response")
-    if (!response.ok) {
-      throw new Error("Giriş yapılamadı.");
-    }
-
+    return response.json();
+  });
+};
+export const useLogout = () => {
+  const {token} = useGetUserInfoFromSession()
+  return useMutation(async () => {
+    const response = await fetch(`${API_BASE_URL}/logout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    sessionStorage.removeItem("token");
     return response.json();
   });
 };
 
+export const useTest = () => {
+  const {token} = useGetUserInfoFromSession()
+  
+  return useMutation(async () => {
+    const response = await fetch(`${API_BASE_URL}/test`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  });
+};
 export const useGetProductList = () => {
-  const authToken = getAuthToken();
-
+  const {token} = useGetUserInfoFromSession()
   return useQuery("products", async () => {
     const response = await fetch(`${API_BASE_URL}/products`, {
       headers: {
-        Authorization: `Bearer ${authToken}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -48,15 +68,15 @@ export const useGetProductList = () => {
 };
 
 export const useAddProduct = () => {
+  const {token} = useGetUserInfoFromSession()
   const queryClient = useQueryClient();
-  const authToken = getAuthToken();
 
   return useMutation(async (newProduct: any) => {
     const response = await fetch(`${API_BASE_URL}/products`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(newProduct),
     });

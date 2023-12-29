@@ -7,24 +7,28 @@ import useHasAuthentication from "./hooks/useHasAuthentication";
 import Layout from "./layout/Layout";
 import Survey from "./views/survey/Survey";
 import Report from "./views/report/Report";
+import useGetUserInfoFromSession from "./hooks/useGetTokenFromSession";
+import { useRoutePermissionCheck } from "./layout/routes";
 
 function App() {
   const hasAuthentication = useHasAuthentication();
-
+  const {role} = useGetUserInfoFromSession()
+  console.log(role,"rolerole")
   const navigate = useNavigate();
   useEffect(() => {
     if (!hasAuthentication) {
       navigate("/login");
     }
   }, [navigate]);
-
+  const navbarRoutes = useRoutePermissionCheck()
   return (
     <Routes>
       <Route path={"/login"} element={<Login />} />
       {hasAuthentication && (
         <Route path="/" element={<Layout />}>
-          <Route path={"/survey"} element={<Survey />} />
-          <Route path={"/report"} element={<Report />} />
+         { navbarRoutes.map(t=>(
+           <Route path={t.path} element={t.page} />
+         ))}
         </Route>
       )}
     </Routes>

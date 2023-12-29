@@ -12,23 +12,22 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { navbarRoutes } from '../routes';
+import {  useRoutePermissionCheck } from '../routes';
 import { useNavigate } from 'react-router';
+import { useLogout } from '../../stores/LoginStore';
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
-
+  const navbarRoutes = useRoutePermissionCheck()
   const navigate = useNavigate();
-  const logout = () => {
-    sessionStorage.removeItem("token");
+  const logoutMutation = useLogout();
+  const logout = async () => {
+    await logoutMutation.mutateAsync()    
     navigate("/login")
   };
 
