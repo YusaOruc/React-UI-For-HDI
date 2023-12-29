@@ -25,10 +25,10 @@ const Login = () => {
   const loginMutation = useLoginUser();
   const defaultOnSubmit = async (d: any) => {
     try {
-      const result = await loginMutation.mutateAsync({
-        username: "Anketor",
-        password: "Anketor",
-      });
+      // const result = await loginMutation.mutateAsync({
+      //   username: "Anketor",
+      //   password: "Anketor",
+      // });
       sessionStorage.setItem("token", "Bearer Test");
       navigate("/survey");
 

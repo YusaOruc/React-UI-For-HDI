@@ -1,157 +1,248 @@
-import { Button, Container, Divider, Grid, IconButton } from "@mui/material";
-import { TextField } from "mui-rff";
-import { requiredCheck } from "../../utils/validation";
+import { Button, Chip, Divider, IconButton } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import arrayMutators from "final-form-arrays";
 import { MinusCircleOutline, Plus } from "mdi-material-ui";
+import { TextField } from "mui-rff";
 import { Form } from "react-final-form";
 import { FieldArray } from "react-final-form-arrays";
 
-interface ISurveyFormProps {
-  editId?: number;
+interface ISurveyEditFormProps {
+  disabled?: boolean;
+  editId: number;
 }
-const SurveyForm = (props: ISurveyFormProps) => {
-  const { editId } = props;
+
+const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
+  const { disabled = false, editId } = props;
 
   const validate = (values: any) => {
     const errors: any = {};
-    errors.name = requiredCheck(values.name);
+
     return errors;
   };
   const defaultOnSubmit = async (d: any) => {
     try {
-      if ((d as any).file && (d as any).file[0]) {
-      }
+        console.log(d,"dddddddd")
       return undefined;
     } catch (e: any) {
-      if (e.status === 400) {
-        return undefined;
+      if (e.response?.status === 400) {
+        const response = await e.response.json();
+        const errors = "FormatErrors(response)"
+
+        return errors;
       } else {
         throw e;
       }
     }
   };
   return (
-    <Container maxWidth="md" sx={{ p: 5 }}>
     <Form
+      subscription={{ submitting: true, pristine: true }}
       onSubmit={defaultOnSubmit}
       validate={validate}
       mutators={{
         ...arrayMutators,
       }}
+      //initialValues={initialValues}
       render={({
         handleSubmit,
+        submitting,
+        pristine,
         form: {
           reset,
-          mutators: { push, pop, setField },
+          mutators: { push, pop },
         },
       }) => (
         <form onSubmit={handleSubmit} noValidate>
           <Grid container alignItems="flex-start" spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                name="name"
-                type="text"
-                label="Adı"
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="description"
-                type="text"
-                label="Açıklama"
-                fullWidth
-                required
-                multiline
-                rows={5}
-              />
-            </Grid>
-            <Grid item xs={12} container justifyContent="flex-end" spacing={2}>
+            <Grid container item xs={12} spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  name="title"
+                  type="text"
+                  label="Başlık"
+                  fullWidth
+                  required
+                  disabled={disabled}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Divider light />
+              </Grid>
+
+              <Grid item xs={12} container justifyContent="flex-start">
                 <Grid item>
                   <Button
                     type="button"
-                    variant="outlined"
-                    onClick={() => push("unitWorkingHourParts", undefined)}
-                    color="primary"
+                    variant="text"
+                    onClick={() =>
+                      push("anketQuestions", {
+                        anketQuestionOptions: [],
+                      })
+                    }
+                    color="success"
+                    disabled={disabled}
                     startIcon={<Plus />}
                   >
-                    Şık Ekle
+                    {"Soru Ekle"}
                   </Button>
                 </Grid>
-            </Grid>
-            <FieldArray name="unitWorkingHourParts">
-              {({ fields, meta: { error, submitFailed } }) =>
-                fields.map((name, index) => (
-                  <Grid item xs={12} spacing={2} container key={name}>
-                    <Grid item xs={11}>
-                      <TextField
-                        name={`${name}.startMinute`}
-                        type="text"
-                        label={`${index + 1})`}
-                        fullWidth
-                        multiline
-                        rows={2}
-                        disabled={fields.value[index] && fields.value[index].id}
-                      />
-                    </Grid>
-                    <Grid item xs="auto" style={{ margin: "auto" }}>
-                      {fields.value[index] && fields.value[index].id ? (
-                        <IconButton
-                          size="small"
-                          color="error"
-                          onClick={() => fields.remove(index)}
-                        >
-                          <MinusCircleOutline />
-                        </IconButton>
-                      ) : (
-                        <IconButton
-                          size="small"
-                          color="error"
-                          onClick={() => fields.remove(index)}
-                        >
-                          <MinusCircleOutline />
-                        </IconButton>
-                      )}
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Divider />
-                    </Grid>
-                  </Grid>
-                ))
-              }
-            </FieldArray>
-            <Grid item xs={12}>
-              <Divider light />
-            </Grid>
+              </Grid>
 
-            <Grid item xs={12} container justifyContent="flex-end">
-              <Button
-                sx={{ minWidth: "150px", float: "right", mr: 2 }}
-                variant="outlined"
-                color="error"
-                size="small"
-                onClick={() => {
-                  reset();
-                }}
-              >
-                İptal
-              </Button>
-              <Button
-                sx={{ minWidth: "150px", float: "right" }}
-                variant="contained"
-                color="primary"
-                size="small"
-                type="submit"
-              >
-                Kaydet
-              </Button>
+              <Grid item container>
+                <FieldArray name="anketQuestions">
+                  {({ fields, meta: { error, submitFailed } }) =>
+                    fields.map((anketQuestionName, anketQuestionIndex) => (
+                      <Grid item container key={anketQuestionName}>
+                        <Grid item xs={12}>
+                          <Divider sx={{mb:2}} >
+                            <Chip
+                              color="success"
+                              label={`${anketQuestionIndex + 1}.Soru`}
+                            />
+                          </Divider>
+                        </Grid>
+                        <Grid
+                          item
+                          xs
+                          container
+                          justifyContent="flex-end"
+                          spacing={2}
+                        >
+                          <Grid item xs={12}>
+                            <TextField
+                              name={`${anketQuestionName}.title`}
+                              type="text"
+                              label={"Soru"}
+                              fullWidth
+                              required
+                              disabled={disabled }
+                            />
+                          </Grid>
+                        </Grid>
+                        <Grid item xs="auto" sx={{ margin: "auto" }}>
+                        <IconButton
+                              sx={{ margin: "15px" }}
+                              size="small"
+                              onClick={() => fields.remove(anketQuestionIndex)}
+                            >
+                              <MinusCircleOutline />
+                            </IconButton>
+                        </Grid>
+                       
+                          <Grid
+                            item
+                            xs={12}
+                            container
+                            justifyContent="flex-start"
+                          >
+                            <Grid item>
+                              <Button
+                              type="button"
+                                variant="text"
+                                onClick={() =>
+                                  push(
+                                    `${anketQuestionName}.anketQuestionOptions`
+                                  )
+                                }
+                                color="primary"
+                                startIcon={<Plus />}
+                              >
+                                {"Seçenek Ekle"}
+                              </Button>
+                            </Grid>
+                          </Grid>
+                       
+                        {fields.value[anketQuestionIndex].anketQuestionOptions
+                          .length > 0 && (
+                          <Grid item xs={12}>
+                            <Divider>
+                              <Chip label="Cevaplar" />
+                            </Divider>
+                          </Grid>
+                        )}
+                        <Grid item container>
+                          <FieldArray
+                            name={`${anketQuestionName}.anketQuestionOptions`}
+                          >
+                            {({ fields, meta: { error, submitFailed } }) =>
+                              fields.map(
+                                (
+                                  anketQuestionOptionName,
+                                  anketQuestionOptionIndex
+                                ) => (
+                                  <Grid
+                                    item
+                                    xs={12}
+                                    justifyContent="flex-end"
+                                    container
+                                    key={anketQuestionOptionName}
+                                  >
+                                    <Grid item xs={9}>
+                                      <TextField
+                                        name={`${anketQuestionOptionName}.title`}
+                                        type="text"
+                                        label={`${ anketQuestionOptionIndex + 1 }.Soru`}
+                                        fullWidth
+                                        required
+                                        disabled={disabled }
+                                      />
+                                    </Grid>
+
+                                    <Grid item>
+                                    <IconButton
+                                          sx={{ margin: "15px" }}
+                                          size="small"
+                                          onClick={() =>
+                                            fields.remove(
+                                              anketQuestionOptionIndex
+                                            )
+                                          }
+                                        >
+                                          <MinusCircleOutline />
+                                        </IconButton>
+                                    </Grid>
+                                  </Grid>
+                                )
+                              )
+                            }
+                          </FieldArray>
+                        </Grid>
+                      </Grid>
+                    ))
+                  }
+                </FieldArray>
+              </Grid>
+              <Grid item xs={12}>
+                <Divider light />
+              </Grid>
+
+              <Grid item xs={12} container justifyContent="flex-end">
+                <Button
+                  sx={{ minWidth: "150px", float: "right", mr: 2 }}
+                  variant="outlined"
+                  color="error"
+                  size="small"
+                  onClick={() => {
+                    reset();
+                  }}
+                >
+                  İptal
+                </Button>
+                <Button
+                  sx={{ minWidth: "150px", float: "right" }}
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  type="submit"
+                >
+                  Kaydet
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
         </form>
       )}
     />
-    </Container>
   );
 };
 

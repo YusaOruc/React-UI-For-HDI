@@ -3,6 +3,7 @@ import React from "react";
 import useTablePageState from "../../hooks/useTablePageState";
 import PageModal from "../../components/PageModal";
 import SurveyForm from "./SurveyForm";
+import SurveyEditForm from "./SurveyForm";
 
 interface ISurveyItemProps {
     handleEdit: (id: number) => void;
@@ -66,7 +67,8 @@ const Survey = () => {
         isOpen={open}
         handleClose={handleClose}
       >
-        <SurveyForm editId={currentId!} />
+       
+       <SurveyForm editId={currentId!} />
       </PageModal>
     </Container>
   );
