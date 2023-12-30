@@ -13,7 +13,7 @@ import { useRoutePermissionCheck } from "./layout/routes";
 function App() {
   const hasAuthentication = useHasAuthentication();
   const {role} = useGetUserInfoFromSession()
-  console.log(role,"rolerole")
+  
   const navigate = useNavigate();
   useEffect(() => {
     if (!hasAuthentication) {
@@ -27,7 +27,7 @@ function App() {
       {hasAuthentication && (
         <Route path="/" element={<Layout />}>
          { navbarRoutes.map(t=>(
-           <Route path={t.path} element={t.page} />
+           <Route key={t.path} path={t.path} element={t.page} />
          ))}
         </Route>
       )}

@@ -16,6 +16,11 @@ import { Close, ContentSave, PlaylistPlus, Plus } from "mdi-material-ui";
 import { TextField } from "mui-rff";
 import { Form } from "react-final-form";
 import { FieldArray } from "react-final-form-arrays";
+import {
+  useAddSurvey,
+  useGetSurvey,
+  useUpdateSurvey,
+} from "../../stores/SurveyStore";
 
 interface ISurveyEditFormProps {
   disabled?: boolean;
@@ -30,9 +35,19 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
 
     return errors;
   };
+  const isEdit = !!editId;
+  const { data } = useGetSurvey(editId);
+
+  const AddSurvey = useAddSurvey();
+  const UpdateSurvey = useUpdateSurvey();
+
   const defaultOnSubmit = async (d: any) => {
     try {
-      console.log(d, "dddddddd");
+      if (isEdit) {
+        await UpdateSurvey.mutateAsync({ surveyId: editId, updatedSurvey: d });
+      } else {
+        await AddSurvey.mutateAsync(d);
+      }
       return undefined;
     } catch (e: any) {
       if (e.response?.status === 400) {
@@ -51,6 +66,7 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
         subscription={{ submitting: true, pristine: true }}
         onSubmit={defaultOnSubmit}
         validate={validate}
+        initialValues={data}
         mutators={{
           ...arrayMutators,
         }}
@@ -79,8 +95,8 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                 <Tooltip title="Soru Ekle">
                   <IconButton
                     onClick={() =>
-                      push("anketQuestions", {
-                        anketQuestionOptions: [],
+                      push("surveyQuestions", {
+                        surveyQuestionOptions: [],
                       })
                     }
                     color="default"
@@ -95,10 +111,10 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                 </Tooltip>
               </Box>
 
-              <FieldArray name="anketQuestions">
+              <FieldArray name="surveyQuestions">
                 {({ fields, meta: { error, submitFailed } }) =>
-                  fields.map((anketQuestionName, anketQuestionIndex) => (
-                    <Paper sx={{ p: 2 }} key={anketQuestionName}>
+                  fields.map((surveyQuestionName, surveyQuestionIndex) => (
+                    <Paper sx={{ p: 2 }} key={surveyQuestionName}>
                       <Stack spacing={2}>
                         <Box
                           sx={{
@@ -106,19 +122,18 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                             justifyContent: "space-between",
                           }}
                         >
-                         
                           <Typography>
-                            {`${anketQuestionIndex + 1}.Soru`}
+                            {`${surveyQuestionIndex + 1}.Soru`}
                           </Typography>
                           <IconButton
                             size="small"
-                            onClick={() => fields.remove(anketQuestionIndex)}
+                            onClick={() => fields.remove(surveyQuestionIndex)}
                           >
                             <Close />
                           </IconButton>
                         </Box>
                         <TextField
-                          name={`${anketQuestionName}.title`}
+                          name={`${surveyQuestionName}.title`}
                           type="text"
                           label={"Soru"}
                           fullWidth
@@ -134,7 +149,9 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                             type="button"
                             variant="text"
                             onClick={() =>
-                              push(`${anketQuestionName}.anketQuestionOptions`)
+                              push(
+                                `${surveyQuestionName}.surveyQuestionOptions`
+                              )
                             }
                             color="inherit"
                           >
@@ -142,24 +159,24 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                           </Button>
                         </Box>
                         <FieldArray
-                          name={`${anketQuestionName}.anketQuestionOptions`}
+                          name={`${surveyQuestionName}.surveyQuestionOptions`}
                         >
                           {({ fields, meta: { error, submitFailed } }) =>
                             fields.map(
                               (
-                                anketQuestionOptionName,
-                                anketQuestionOptionIndex
+                                surveyQuestionOptionName,
+                                surveyQuestionOptionIndex
                               ) => (
                                 <Box
                                   sx={{ display: "flex" }}
-                                  key={anketQuestionOptionName}
+                                  key={surveyQuestionOptionName}
                                 >
                                   <TextField
                                     size="small"
-                                    name={`${anketQuestionOptionName}.title`}
+                                    name={`${surveyQuestionOptionName}.title`}
                                     type="text"
                                     label={`${
-                                      anketQuestionOptionIndex + 1
+                                      surveyQuestionOptionIndex + 1
                                     }.Seçenek`}
                                     fullWidth
                                     required
@@ -168,7 +185,7 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                                   <IconButton
                                     size="small"
                                     onClick={() =>
-                                      fields.remove(anketQuestionOptionIndex)
+                                      fields.remove(surveyQuestionOptionIndex)
                                     }
                                   >
                                     <Close />
@@ -230,96 +247,95 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                           {({ fields, meta: { error, submitFailed } }) =>
                             fields.map(
                               (partQuestionName, partQuestionIndex) => (
-                                <Paper sx={{p:2}}  key={partQuestionName}>
-                                <Stack spacing={2}>
-                                  <Box
-                                    sx={{
-                                      display: "flex",
-                                      justifyContent: "space-between",
-                                    }}
-                                  >
-                                    <Typography>
-                                    {`${partQuestionIndex + 1}.Soru`}
-                                    </Typography>
-                                    <IconButton
-                                      size="small"
-                                      onClick={() =>
-                                        fields.remove(partQuestionIndex)
-                                      }
+                                <Paper sx={{ p: 2 }} key={partQuestionName}>
+                                  <Stack spacing={2}>
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                      }}
                                     >
-                                      <Close />
-                                    </IconButton>
-                                  </Box>
-                                  <TextField
-                                    name={`${partQuestionName}.title`}
-                                    type="text"
-                                    label={"Soru"}
-                                    fullWidth
-                                    required
-                                    size="small"
-                                    disabled={disabled}
-                                  />
+                                      <Typography>
+                                        {`${partQuestionIndex + 1}.Soru`}
+                                      </Typography>
+                                      <IconButton
+                                        size="small"
+                                        onClick={() =>
+                                          fields.remove(partQuestionIndex)
+                                        }
+                                      >
+                                        <Close />
+                                      </IconButton>
+                                    </Box>
+                                    <TextField
+                                      name={`${partQuestionName}.title`}
+                                      type="text"
+                                      label={"Soru"}
+                                      fullWidth
+                                      required
+                                      size="small"
+                                      disabled={disabled}
+                                    />
 
-                                  <Box>
-                                    <Button
-                                      size="small"
-                                      sx={{ justifyContent: "flex-start" }}
-                                      type="button"
-                                      variant="text"
-                                      onClick={() =>
-                                        push(
-                                          `${partQuestionName}.partQuestionOptions`
+                                    <Box>
+                                      <Button
+                                        size="small"
+                                        sx={{ justifyContent: "flex-start" }}
+                                        type="button"
+                                        variant="text"
+                                        onClick={() =>
+                                          push(
+                                            `${partQuestionName}.partQuestionOptions`
+                                          )
+                                        }
+                                        color="inherit"
+                                      >
+                                        {"Seçenek Ekle"}
+                                      </Button>
+                                    </Box>
+                                    <FieldArray
+                                      name={`${partQuestionName}.partQuestionOptions`}
+                                    >
+                                      {({
+                                        fields,
+                                        meta: { error, submitFailed },
+                                      }) =>
+                                        fields.map(
+                                          (
+                                            anketQuestionOptionName,
+                                            anketQuestionOptionIndex
+                                          ) => (
+                                            <Box
+                                              sx={{ display: "flex" }}
+                                              key={anketQuestionOptionName}
+                                            >
+                                              <TextField
+                                                size="small"
+                                                name={`${anketQuestionOptionName}.title`}
+                                                type="text"
+                                                label={`${
+                                                  anketQuestionOptionIndex + 1
+                                                }.Seçenek`}
+                                                fullWidth
+                                                required
+                                                disabled={disabled}
+                                              />
+                                              <IconButton
+                                                size="small"
+                                                onClick={() =>
+                                                  fields.remove(
+                                                    anketQuestionOptionIndex
+                                                  )
+                                                }
+                                              >
+                                                <Close />
+                                              </IconButton>
+                                            </Box>
+                                          )
                                         )
                                       }
-                                      color="inherit"
-                                    >
-                                      {"Seçenek Ekle"}
-                                    </Button>
-                                  </Box>
-                                  <FieldArray
-                                    name={`${partQuestionName}.partQuestionOptions`}
-                                  >
-                                    {({
-                                      fields,
-                                      meta: { error, submitFailed },
-                                    }) =>
-                                      fields.map(
-                                        (
-                                          anketQuestionOptionName,
-                                          anketQuestionOptionIndex
-                                        ) => (
-                                          <Box
-                                            sx={{ display: "flex" }}
-                                            key={anketQuestionOptionName}
-                                          >
-                                            <TextField
-                                              size="small"
-                                              name={`${anketQuestionOptionName}.title`}
-                                              type="text"
-                                              label={`${
-                                                anketQuestionOptionIndex + 1
-                                              }.Seçenek`}
-                                              fullWidth
-                                              required
-                                              disabled={disabled}
-                                            />
-                                            <IconButton
-                                              size="small"
-                                              onClick={() =>
-                                                fields.remove(
-                                                  anketQuestionOptionIndex
-                                                )
-                                              }
-                                            >
-                                              <Close />
-                                            </IconButton>
-                                          </Box>
-                                        )
-                                      )
-                                    }
-                                    
-                                  </FieldArray>
-                                </Stack>
+                                    </FieldArray>
+                                  </Stack>
                                 </Paper>
                               )
                             )
