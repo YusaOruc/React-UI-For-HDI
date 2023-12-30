@@ -20,9 +20,14 @@ export const useGetSurveyList = () => {
   });
 };
 
-export const useGetSurvey = (id: number) => {
+export const useGetSurvey = (id: number, shouldFetch: boolean = true) => {
   const { token } = useGetUserInfoFromSession();
   return useQuery(["survey", id], async () => {
+
+    if (!shouldFetch) {
+        // Eğer shouldFetch false ise sorguyu çalıştırma
+        return;
+      }
     const response = await fetch(`${API_BASE_URL}/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,

@@ -36,12 +36,15 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
     return errors;
   };
   const isEdit = !!editId;
-  const { data } = useGetSurvey(editId);
+
+
+  const { data:initialValues } = useGetSurvey(editId, isEdit);
 
   const AddSurvey = useAddSurvey();
   const UpdateSurvey = useUpdateSurvey();
 
   const defaultOnSubmit = async (d: any) => {
+    console.log(d, "dddd");
     try {
       if (isEdit) {
         await UpdateSurvey.mutateAsync({ surveyId: editId, updatedSurvey: d });
@@ -66,7 +69,7 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
         subscription={{ submitting: true, pristine: true }}
         onSubmit={defaultOnSubmit}
         validate={validate}
-        initialValues={data}
+        initialValues={initialValues}
         mutators={{
           ...arrayMutators,
         }}

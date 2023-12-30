@@ -48,12 +48,13 @@ const Survey = () => {
     formCallback,
   } = useTablePageState();
   const theme = useTheme();
-
+  
   const { data = [], isLoading, isError } = useGetSurveyList();
 
 
   return (
     <Container maxWidth="md" sx={{ p: 5 }}>
+      <Paper sx={{p:2}}>
       <Button onClick={handleClickOpen} variant="outlined" color="success">
         Anket Ekle
       </Button>
@@ -73,6 +74,7 @@ const Survey = () => {
       >
         <SurveyForm editId={currentId!} />
       </PageModal>
+      </Paper>
     </Container>
   );
 };
