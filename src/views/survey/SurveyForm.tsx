@@ -235,8 +235,8 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                           <Tooltip title="Soru Ekle">
                             <IconButton
                               onClick={() =>
-                                push(`${partName}.partQuestions`, {
-                                  partQuestionOptions: [],
+                                push(`${partName}.surveyQuestions`, {
+                                  surveyQuestionOptions: [],
                                 })
                               }
                               color="default"
@@ -245,11 +245,11 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                             </IconButton>
                           </Tooltip>
                         </Box>
-                        <FieldArray name={`${partName}.partQuestions`}>
+                        <FieldArray name={`${partName}.surveyQuestions`}>
                           {({ fields, meta: { error, submitFailed } }) =>
                             fields.map(
-                              (partQuestionName, partQuestionIndex) => (
-                                <Paper sx={{ p: 2 }} key={partQuestionName}>
+                              (surveyQuestionName, surveyQuestionIndex) => (
+                                <Paper sx={{ p: 2 }} key={surveyQuestionName}>
                                   <Stack spacing={2}>
                                     <Box
                                       sx={{
@@ -258,19 +258,19 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                                       }}
                                     >
                                       <Typography>
-                                        {`${partQuestionIndex + 1}.Soru`}
+                                        {`${surveyQuestionIndex + 1}.Soru`}
                                       </Typography>
                                       <IconButton
                                         size="small"
                                         onClick={() =>
-                                          fields.remove(partQuestionIndex)
+                                          fields.remove(surveyQuestionIndex)
                                         }
                                       >
                                         <Close />
                                       </IconButton>
                                     </Box>
                                     <TextField
-                                      name={`${partQuestionName}.title`}
+                                      name={`${surveyQuestionName}.title`}
                                       type="text"
                                       label={"Soru"}
                                       fullWidth
@@ -287,7 +287,7 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                                         variant="text"
                                         onClick={() =>
                                           push(
-                                            `${partQuestionName}.partQuestionOptions`
+                                            `${surveyQuestionName}.surveyQuestionOptions`
                                           )
                                         }
                                         color="inherit"
@@ -296,7 +296,7 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                                       </Button>
                                     </Box>
                                     <FieldArray
-                                      name={`${partQuestionName}.partQuestionOptions`}
+                                      name={`${surveyQuestionName}.surveyQuestionOptions`}
                                     >
                                       {({
                                         fields,
@@ -304,19 +304,19 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                                       }) =>
                                         fields.map(
                                           (
-                                            anketQuestionOptionName,
-                                            anketQuestionOptionIndex
+                                            surveyQuestionOptionName,
+                                            surveyQuestionOptionIndex
                                           ) => (
                                             <Box
                                               sx={{ display: "flex" }}
-                                              key={anketQuestionOptionName}
+                                              key={surveyQuestionOptionName}
                                             >
                                               <TextField
                                                 size="small"
-                                                name={`${anketQuestionOptionName}.title`}
+                                                name={`${surveyQuestionOptionName}.title`}
                                                 type="text"
                                                 label={`${
-                                                  anketQuestionOptionIndex + 1
+                                                  surveyQuestionOptionIndex + 1
                                                 }.Seçenek`}
                                                 fullWidth
                                                 required
@@ -326,7 +326,7 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                                                 size="small"
                                                 onClick={() =>
                                                   fields.remove(
-                                                    anketQuestionOptionIndex
+                                                    surveyQuestionOptionIndex
                                                   )
                                                 }
                                               >

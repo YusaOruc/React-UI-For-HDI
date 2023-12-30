@@ -46,14 +46,14 @@ export const useAddSurvey = () => {
   const { token } = useGetUserInfoFromSession();
   const queryClient = useQueryClient();
 
-  return useMutation(async (newProduct: any) => {
+  return useMutation(async (survey: any) => {
     const response = await fetch(`${API_BASE_URL}/postSurvey`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(newProduct),
+      body: JSON.stringify(survey),
     });
 
     if (!response.ok) {
