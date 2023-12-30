@@ -5,6 +5,12 @@ import {
   Stack,
   Typography,
   useTheme,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  Box,
+  ListItemText,
 } from "@mui/material";
 import React from "react";
 import useTablePageState from "../../hooks/useTablePageState";
@@ -21,33 +27,14 @@ interface ISurveyItemProps {
   date: Date
 }
 const SurveyItem = (props: ISurveyItemProps) => {
-  const { handleEdit, id, title,date } = props;
-  
+  const { handleEdit, id, title } = props;
+   
   return (
-    <Paper
-      onClick={() => handleEdit(id)}
-      sx={{
-        p: 3,
-        "&:hover": {
-          backgroundColor: "#f0f0f0",
-          cursor: "pointer",
-        },
-      }}
-    >
-      <Stack direction="row" justifyContent="space-between">
-        <Typography
-          sx={{
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-          }}
-          variant="h6"
-        >
-          {title}
-        </Typography>
-        <Typography>{"01.01.2023"}</Typography>
-      </Stack>
-    </Paper>
+   <ListItem disablePadding onClick={()=>handleEdit(id)}>
+           <ListItemButton >
+           <ListItemText primary={title} />
+           </ListItemButton>
+         </ListItem>
   );
 };
 const Survey = () => {
@@ -63,18 +50,20 @@ const Survey = () => {
   const theme = useTheme();
 
   const { data = [], isLoading, isError } = useGetSurveyList();
-  console.log(data, "data");
+
 
   return (
     <Container maxWidth="md" sx={{ p: 5 }}>
       <Button onClick={handleClickOpen} variant="outlined" color="success">
         Anket Ekle
       </Button>
-      <Stack spacing={2} sx={{ marginTop: 2 }}>
-        {data.map((t: any) => (
-          <SurveyItem date={t.createDate} id={t.id} title={t.title} key={t.id} handleEdit={handleEdit} />
+    
+        <List >
+         
+          {data.map((t: any) => (
+           <SurveyItem date={t.createDate} id={t.id} title={t.title} key={t.id} handleEdit={handleEdit} />
         ))}
-      </Stack>
+        </List>
       <PageModal
         title="Anket"
         backgroundColor={theme.palette.grey[100]}

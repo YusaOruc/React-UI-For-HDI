@@ -70,7 +70,6 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
         mutators={{
           ...arrayMutators,
         }}
-        //initialValues={initialValues}
         render={({
           handleSubmit,
           submitting,

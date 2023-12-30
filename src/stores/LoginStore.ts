@@ -32,7 +32,7 @@ export const useLogout = () => {
       },
     });
     sessionStorage.removeItem("token");
-    return response.json();
+    
   });
 };
 
