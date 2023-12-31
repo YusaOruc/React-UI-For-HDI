@@ -62,7 +62,7 @@ const Survey = () => {
         <List >
          
           {data.map((t: any) => (
-           <SurveyItem date={t.createDate} id={t.id} title={t.title} key={t.id} handleEdit={handleEdit} />
+           <SurveyItem date={t.createDate} id={t.id} title={t.title} key={t.id} handleEdit={handleEdit}  />
         ))}
         </List>
       <PageModal
@@ -72,7 +72,7 @@ const Survey = () => {
         isOpen={open}
         handleClose={handleClose}
       >
-        <SurveyForm editId={currentId!} />
+        <SurveyForm editId={currentId!}  callback={formCallback}/>
       </PageModal>
       </Paper>
     </Container>

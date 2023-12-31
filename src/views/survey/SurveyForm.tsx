@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Chip,
@@ -21,14 +22,17 @@ import {
   useGetSurvey,
   useUpdateSurvey,
 } from "../../stores/SurveyStore";
+import SurveySelect from "../../components/formInputs/SurveySelect";
+import useAlertState from "../../components/alerts/useAlertState";
 
 interface ISurveyEditFormProps {
   disabled?: boolean;
   editId: number;
+  callback?: ((errors?: any) => void) | undefined
 }
 
 const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
-  const { disabled = false, editId } = props;
+  const { disabled = false, editId ,callback} = props;
 
   const validate = (values: any) => {
     const errors: any = {};
@@ -37,19 +41,21 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
   };
   const isEdit = !!editId;
 
-
-  const { data:initialValues } = useGetSurvey(editId, isEdit);
+  const { data: initialValues } = useGetSurvey(editId, isEdit);
 
   const AddSurvey = useAddSurvey();
   const UpdateSurvey = useUpdateSurvey();
-
+  const { alertState, showAlert } = useAlertState({});
   const defaultOnSubmit = async (d: any) => {
-    console.log(d, "dddd");
     try {
       if (isEdit) {
         await UpdateSurvey.mutateAsync({ surveyId: editId, updatedSurvey: d });
+        showAlert();
       } else {
         await AddSurvey.mutateAsync(d);
+        if(callback){
+          callback()
+        }
       }
       return undefined;
     } catch (e: any) {
@@ -84,6 +90,9 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
         }) => (
           <form onSubmit={handleSubmit} noValidate>
             <Stack spacing={2}>
+              {alertState && (
+                <Alert severity="success">{"Bilgiler güncellenmiştir."}</Alert>
+              )}
               <TextField
                 name="title"
                 type="text"
@@ -134,16 +143,27 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                             <Close />
                           </IconButton>
                         </Box>
-                        <TextField
-                          name={`${surveyQuestionName}.title`}
-                          type="text"
-                          label={"Soru"}
-                          fullWidth
-                          required
-                          size="small"
-                          disabled={disabled}
-                        />
-
+                        <Grid container spacing={1}>
+                          <Grid item xs={12} sm={8}>
+                            <TextField
+                              name={`${surveyQuestionName}.title`}
+                              type="text"
+                              label={"Soru"}
+                              fullWidth
+                              required
+                              size="small"
+                              disabled={disabled}
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={4}>
+                            <SurveySelect
+                              name={`${surveyQuestionName}.expandSurveyBaseId`}
+                              parentId={editId}
+                              label="Bölüm"
+                              size="small"
+                            />
+                          </Grid>
+                        </Grid>
                         <Box>
                           <Button
                             size="small"
