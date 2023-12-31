@@ -7,6 +7,7 @@ import {
     ListItem,
     ListItemButton,
     ListItemText,
+    Box,
   } from "@mui/material";
   import useTablePageState from "../../hooks/useTablePageState";
   import PageModal from "../../components/PageModal";
@@ -43,15 +44,15 @@ import FillSurveyForm from "./FillSurveyForm";
     const theme = useTheme();
     
     const { data = [], isLoading, isError } = useGetSurveyList();
-  
+    console.log(data,"data")
   
     return (
       <Container maxWidth="md" sx={{ p: 5 }}>
         <Paper sx={{p:2}}>
           <List >
-            {data.map((t: any,index: any) => (
-             <FillSurveyItem date={t.createDate} id={t.id} title={t.title} key={index} handleEdit={handleEdit}  />
-          ))}
+            {data.map((t: any,index: any) => 
+             <FillSurveyItem  key={t.title} date={t.createDate} id={t.id} title={t.title}  handleEdit={handleEdit}  />
+          )}
           </List>
         <PageModal
           title="Ankete Katıl"

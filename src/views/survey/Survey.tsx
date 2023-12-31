@@ -7,6 +7,7 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  Box,
 } from "@mui/material";
 import useTablePageState from "../../hooks/useTablePageState";
 import PageModal from "../../components/PageModal";
@@ -52,15 +53,14 @@ const Survey = () => {
         </Button>
 
         <List>
-          {data.map((t: any, index: any) => (
+          {data.map((t: any, index: any) => 
             <SurveyItem
               date={t.createDate}
               id={t.id}
-              title={t.title}
-              key={index}
+              title={t.title}             
               handleEdit={handleEdit}
             />
-          ))}
+          )}
         </List>
         <PageModal
           title="Anket"

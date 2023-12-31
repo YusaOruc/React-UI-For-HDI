@@ -3,14 +3,75 @@ import useGetUserInfoFromSession from "../hooks/useGetTokenFromSession";
 
 const API_BASE_URL = "https://localhost:7178/api/surveyModule/Survey";
 
-export const useGetSurveyNameList = (parentId:number) => {
+type SurveyResultReturn = { [k: string]: any };
+
+export const useGetSurveyResult = (surveyId: number) => {
+  console.log(surveyId,"surveyId")
   const { token } = useGetUserInfoFromSession();
-  return useQuery("surveyNames", async () => {
-    const response = await fetch(`${API_BASE_URL}/surveyNames?parentId=${parentId}`, {
+  const query = useQuery("surveyResults", async () => {
+    const response = await fetch(
+      `${API_BASE_URL}/results?surveyId=${surveyId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Anket listesi alınamadı.");
+    }
+    return response.json();
+  });
+
+  const data: SurveyResultReturn = {};
+  const { data: answers } = query;
+  if(answers){
+    data.surveyId = surveyId;
+    answers.forEach((t: any) => {
+      data[`q-${t.surveyQuestionId}`] = `${t.surveyQuestionOptionId}`;
+    });
+  }
+ 
+ 
+  return data;
+};
+
+export const useAddSurveyResult = (surveyId:number) => {
+  const { token } = useGetUserInfoFromSession();
+  const queryClient = useQueryClient();
+
+  return useMutation(async (surveyResults: any)  => {
+    const response = await fetch(`${API_BASE_URL}/surveyResultMultiple?surveyId=${surveyId}`, {
+      method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify(surveyResults),
     });
+
+    if (!response.ok) {
+      throw new Error("Anket eklenemedi.");
+    }
+
+    // Yeni Anket eklendikten sonra 'surveys' sorgusunu tekrar çağır
+    queryClient.invalidateQueries("surveyResults");
+
+  });
+};
+
+export const useGetSurveyNameList = (parentId: number) => {
+  const { token } = useGetUserInfoFromSession();
+  return useQuery("surveyNames", async () => {
+    const response = await fetch(
+      `${API_BASE_URL}/surveyNames?parentId=${parentId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Anket İsmi listesi alınamadı.");
@@ -40,11 +101,10 @@ export const useGetSurveyList = () => {
 export const useGetSurvey = (id: number, shouldFetch: boolean = true) => {
   const { token } = useGetUserInfoFromSession();
   return useQuery(["survey", id], async () => {
-
     if (!shouldFetch) {
-        // Eğer shouldFetch false ise sorguyu çalıştırma
-        return;
-      }
+      // Eğer shouldFetch false ise sorguyu çalıştırma
+      return;
+    }
     const response = await fetch(`${API_BASE_URL}/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -79,6 +139,7 @@ export const useAddSurvey = () => {
 
     // Yeni Anket eklendikten sonra 'surveys' sorgusunu tekrar çağır
     queryClient.invalidateQueries("surveys");
+    queryClient.invalidateQueries("surveyNames");
   });
 };
 
@@ -110,6 +171,7 @@ export const useUpdateSurvey = () => {
         }
 
         queryClient.invalidateQueries("surveys");
+        queryClient.invalidateQueries("surveyNames");
         queryClient.invalidateQueries(["survey", surveyId]);
       } catch (error: any) {
         // Handle any errors that occurred during the mutation
