@@ -3,6 +3,23 @@ import useGetUserInfoFromSession from "../hooks/useGetTokenFromSession";
 
 const API_BASE_URL = "https://localhost:7178/api/surveyModule/Survey";
 
+export const useGetSurveyNameList = (parentId:number) => {
+  const { token } = useGetUserInfoFromSession();
+  return useQuery("surveyNames", async () => {
+    const response = await fetch(`${API_BASE_URL}/surveyNames?parentId=${parentId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Anket İsmi listesi alınamadı.");
+    }
+
+    return response.json();
+  });
+};
+
 export const useGetSurveyList = () => {
   const { token } = useGetUserInfoFromSession();
   return useQuery("surveys", async () => {
