@@ -6,7 +6,7 @@ const API_BASE_URL = "https://localhost:7178/api/surveyModule/Survey";
 type SurveyResultReturn = { [k: string]: any };
 
 export const useGetSurveyResult = (surveyId: number) => {
-  console.log(surveyId,"surveyId")
+  
   const { token } = useGetUserInfoFromSession();
   const query = useQuery("surveyResults", async () => {
     const response = await fetch(

@@ -3,6 +3,7 @@ import Survey from "../views/survey/Survey";
 import Report from "../views/report/Report";
 import { Home, People } from "@mui/icons-material";
 import FillSurvey from "../views/fillSurvey/FillSurvey";
+import User from "../views/user/User";
 interface IRoute {
   id: number;
   name: string;
@@ -14,7 +15,8 @@ interface IRoute {
 
 enum RoleEnum {
   Anketor = "Anketor",
-  Report = "Report",
+  StandardUser = "StandardUser",
+  Reporting = "Reporting",
 }
 const navbarRoutes: IRoute[] = [
   {
@@ -31,14 +33,22 @@ const navbarRoutes: IRoute[] = [
     path: "/report",
     icon: <People />,
     page: <Report />,
-    role: RoleEnum.Report,
+    role: RoleEnum.Reporting,
   },
   {
-    id: 1,
+    id: 3,
     name: "Ankete Katıl",
     path: "/fillSurvey",
     icon: <Home />,
     page: <FillSurvey />,
+    role: RoleEnum.Anketor,
+  },
+  {
+    id: 4,
+    name: "Kullanıcı Tanımla",
+    path: "/user",
+    icon: <Home />,
+    page: <User />,
     role: RoleEnum.Anketor,
   },
 ];

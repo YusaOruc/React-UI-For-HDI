@@ -8,21 +8,22 @@ import {
   ListItemButton,
   ListItemText,
   Box,
+  CircularProgress,
 } from "@mui/material";
 import useTablePageState from "../../hooks/useTablePageState";
 import PageModal from "../../components/PageModal";
 import { useGetSurveyList } from "../../stores/SurveyStore";
-import FillSurveyForm from "./FillSurveyForm";
+import UserForm from "./UserForm";
+import { useGetUserList } from "../../stores/UserStore";
 import PageCircularProgress from "../../components/PageCircularProgress";
 import ListNotFound from "../../components/ListNotFound";
 
-interface IFillSurveyItemProps {
+interface IUserItemProps {
   handleEdit: (id: number) => void;
   id: number;
   title: string;
-  date: Date;
 }
-const FillSurveyItem = (props: IFillSurveyItemProps) => {
+const UserItem = (props: IUserItemProps) => {
   const { handleEdit, id, title } = props;
 
   return (
@@ -33,7 +34,7 @@ const FillSurveyItem = (props: IFillSurveyItemProps) => {
     </ListItem>
   );
 };
-const FillSurvey = () => {
+const User = () => {
   const {
     open,
     currentId,
@@ -45,7 +46,7 @@ const FillSurvey = () => {
   } = useTablePageState();
   const theme = useTheme();
 
-  const { data = [], isLoading, isError } = useGetSurveyList();
+  const { data = [], isLoading, isError } = useGetUserList();
   if (isLoading) {
     return (
       <PageCircularProgress/>
@@ -56,33 +57,34 @@ const FillSurvey = () => {
       <ListNotFound/>
     );
   }
-
   return (
     <Container maxWidth="md" sx={{ p: 5 }}>
       <Paper sx={{ p: 2 }}>
+        <Button onClick={handleClickOpen} variant="outlined" color="success">
+          Kullanıcı Ekle
+        </Button>
+
         <List>
           {data.map((t: any, index: any) => (
-            <FillSurveyItem
-              key={t.title}
-              date={t.createDate}
+            <UserItem
+              key={t.id}
               id={t.id}
-              title={t.title}
+              title={t.userName}
               handleEdit={handleEdit}
             />
           ))}
         </List>
         <PageModal
-          title="Ankete Katıl"
+          title="Kullanıcı"
           backgroundColor={theme.palette.grey[100]}
-          fullScreen
           isOpen={open}
           handleClose={handleClose}
         >
-          <FillSurveyForm editId={currentId!} />
+          <UserForm editId={currentId!} callback={formCallback} />
         </PageModal>
       </Paper>
     </Container>
   );
 };
 
-export default FillSurvey;
+export default User;

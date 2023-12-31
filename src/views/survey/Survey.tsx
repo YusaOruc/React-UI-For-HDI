@@ -13,6 +13,8 @@ import useTablePageState from "../../hooks/useTablePageState";
 import PageModal from "../../components/PageModal";
 import SurveyForm from "./SurveyForm";
 import { useGetSurveyList } from "../../stores/SurveyStore";
+import PageCircularProgress from "../../components/PageCircularProgress";
+import ListNotFound from "../../components/ListNotFound";
 
 interface ISurveyItemProps {
   handleEdit: (id: number) => void;
@@ -44,7 +46,16 @@ const Survey = () => {
   const theme = useTheme();
 
   const { data = [], isLoading, isError } = useGetSurveyList();
-
+  if (isLoading) {
+    return (
+      <PageCircularProgress/>
+    );
+  }
+  if (data.length===0) {
+    return (
+      <ListNotFound/>
+    );
+  }
   return (
     <Container maxWidth="md" sx={{ p: 5 }}>
       <Paper sx={{ p: 2 }}>
@@ -55,6 +66,7 @@ const Survey = () => {
         <List>
           {data.map((t: any, index: any) => 
             <SurveyItem
+              key={t.id}
               date={t.createDate}
               id={t.id}
               title={t.title}             
