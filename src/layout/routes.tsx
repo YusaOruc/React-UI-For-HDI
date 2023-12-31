@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import Survey from "../views/survey/Survey";
 import Report from "../views/report/Report";
 import { Home, People } from "@mui/icons-material";
+import FillSurvey from "../views/fillSurvey/FillSurvey";
 interface IRoute {
   id: number;
   name: string;
@@ -31,6 +32,14 @@ const navbarRoutes: IRoute[] = [
     icon: <People />,
     page: <Report />,
     role: RoleEnum.Report,
+  },
+  {
+    id: 1,
+    name: "Ankete Katıl",
+    path: "/fillSurvey",
+    icon: <Home />,
+    page: <FillSurvey />,
+    role: RoleEnum.Anketor,
   },
 ];
 

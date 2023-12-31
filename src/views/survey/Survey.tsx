@@ -61,9 +61,9 @@ const Survey = () => {
     
         <List >
          
-          {data.map((t: any) => (
-           <SurveyItem date={t.createDate} id={t.id} title={t.title} key={t.id} handleEdit={handleEdit}  />
-        ))}
+          {data.map((t: any,index: any) => (
+           <SurveyItem date={t.createDate} id={t.id} title={t.title}key={index} handleEdit={handleEdit}  />
+          ))}
         </List>
       <PageModal
         title="Anket"

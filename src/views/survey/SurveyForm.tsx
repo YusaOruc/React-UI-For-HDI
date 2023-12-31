@@ -143,9 +143,7 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                             <Close />
                           </IconButton>
                         </Box>
-                        <Grid container spacing={1}>
-                          <Grid item xs={12} sm={8}>
-                            <TextField
+                        <TextField
                               name={`${surveyQuestionName}.title`}
                               type="text"
                               label={"Soru"}
@@ -154,16 +152,6 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                               size="small"
                               disabled={disabled}
                             />
-                          </Grid>
-                          <Grid item xs={12} sm={4}>
-                            <SurveySelect
-                              name={`${surveyQuestionName}.expandSurveyBaseId`}
-                              parentId={editId}
-                              label="Bölüm"
-                              size="small"
-                            />
-                          </Grid>
-                        </Grid>
                         <Box>
                           <Button
                             size="small"
@@ -189,11 +177,9 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                                 surveyQuestionOptionName,
                                 surveyQuestionOptionIndex
                               ) => (
-                                <Box
-                                  sx={{ display: "flex" }}
-                                  key={surveyQuestionOptionName}
-                                >
-                                  <TextField
+                                 <Grid container spacing={1}  key={surveyQuestionOptionIndex}>
+                                 <Grid item xs={12} sm={8}>
+                                 <TextField
                                     size="small"
                                     name={`${surveyQuestionOptionName}.title`}
                                     type="text"
@@ -204,7 +190,17 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                                     required
                                     disabled={disabled}
                                   />
-                                  <IconButton
+                                 </Grid>
+                                 <Grid item xs={12} sm={3}>
+                                   <SurveySelect
+                                     name={`${surveyQuestionOptionName}.expandSurveyBaseId`}
+                                     parentId={editId}
+                                     label="Bölüm"
+                                     size="small"
+                                   />
+                                 </Grid>
+                                 <Grid item xs="auto">
+                                 <IconButton
                                     size="small"
                                     onClick={() =>
                                       fields.remove(surveyQuestionOptionIndex)
@@ -212,7 +208,8 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                                   >
                                     <Close />
                                   </IconButton>
-                                </Box>
+                                 </Grid>
+                               </Grid>
                               )
                             )
                           }
@@ -390,6 +387,7 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                   color="success"
                   size="small"
                   type="submit"
+                  disabled={submitting}
                 >
                   Kaydet
                 </Button>
