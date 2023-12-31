@@ -2,7 +2,6 @@ import {
   Alert,
   Box,
   Button,
-  Chip,
   Container,
   Divider,
   IconButton,
@@ -13,7 +12,7 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import arrayMutators from "final-form-arrays";
-import { Close, ContentSave, PlaylistPlus, Plus } from "mdi-material-ui";
+import { Close, PlaylistPlus, Plus } from "mdi-material-ui";
 import { TextField } from "mui-rff";
 import { Form } from "react-final-form";
 import { FieldArray } from "react-final-form-arrays";
@@ -28,11 +27,11 @@ import useAlertState from "../../components/alerts/useAlertState";
 interface ISurveyEditFormProps {
   disabled?: boolean;
   editId: number;
-  callback?: ((errors?: any) => void) | undefined
+  callback?: ((errors?: any) => void) | undefined;
 }
 
 const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
-  const { disabled = false, editId ,callback} = props;
+  const { disabled = false, editId, callback } = props;
 
   const validate = (values: any) => {
     const errors: any = {};
@@ -53,8 +52,8 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
         showAlert();
       } else {
         await AddSurvey.mutateAsync(d);
-        if(callback){
-          callback()
+        if (callback) {
+          callback();
         }
       }
       return undefined;
@@ -144,14 +143,14 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                           </IconButton>
                         </Box>
                         <TextField
-                              name={`${surveyQuestionName}.title`}
-                              type="text"
-                              label={"Soru"}
-                              fullWidth
-                              required
-                              size="small"
-                              disabled={disabled}
-                            />
+                          name={`${surveyQuestionName}.title`}
+                          type="text"
+                          label={"Soru"}
+                          fullWidth
+                          required
+                          size="small"
+                          disabled={disabled}
+                        />
                         <Box>
                           <Button
                             size="small"
@@ -177,39 +176,43 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                                 surveyQuestionOptionName,
                                 surveyQuestionOptionIndex
                               ) => (
-                                 <Grid container spacing={1}  key={surveyQuestionOptionIndex}>
-                                 <Grid item xs={12} sm={8}>
-                                 <TextField
-                                    size="small"
-                                    name={`${surveyQuestionOptionName}.title`}
-                                    type="text"
-                                    label={`${
-                                      surveyQuestionOptionIndex + 1
-                                    }.Seçenek`}
-                                    fullWidth
-                                    required
-                                    disabled={disabled}
-                                  />
-                                 </Grid>
-                                 <Grid item xs={12} sm={3}>
-                                   <SurveySelect
-                                     name={`${surveyQuestionOptionName}.expandSurveyBaseId`}
-                                     parentId={editId}
-                                     label="Bölüm"
-                                     size="small"
-                                   />
-                                 </Grid>
-                                 <Grid item xs="auto">
-                                 <IconButton
-                                    size="small"
-                                    onClick={() =>
-                                      fields.remove(surveyQuestionOptionIndex)
-                                    }
-                                  >
-                                    <Close />
-                                  </IconButton>
-                                 </Grid>
-                               </Grid>
+                                <Grid
+                                  container
+                                  spacing={1}
+                                  key={surveyQuestionOptionIndex}
+                                >
+                                  <Grid item xs={12} sm={8}>
+                                    <TextField
+                                      size="small"
+                                      name={`${surveyQuestionOptionName}.title`}
+                                      type="text"
+                                      label={`${
+                                        surveyQuestionOptionIndex + 1
+                                      }.Seçenek`}
+                                      fullWidth
+                                      required
+                                      disabled={disabled}
+                                    />
+                                  </Grid>
+                                  <Grid item xs={12} sm={3}>
+                                    <SurveySelect
+                                      name={`${surveyQuestionOptionName}.expandSurveyBaseId`}
+                                      parentId={editId}
+                                      label="Bölüm"
+                                      size="small"
+                                    />
+                                  </Grid>
+                                  <Grid item xs="auto">
+                                    <IconButton
+                                      size="small"
+                                      onClick={() =>
+                                        fields.remove(surveyQuestionOptionIndex)
+                                      }
+                                    >
+                                      <Close />
+                                    </IconButton>
+                                  </Grid>
+                                </Grid>
                               )
                             )
                           }
