@@ -5,12 +5,15 @@ const API_BASE_URL = "https://localhost:7178/api/surveyModule/Survey";
 
 type SurveyResultReturn = { [k: string]: any };
 
-export const useGetSurveyResult = (surveyId: number) => {
+export const useGetSurveyResult = (surveyId: number,userId?:number) => {
   
   const { token } = useGetUserInfoFromSession();
   const query = useQuery("surveyResults", async () => {
-    const response = await fetch(
-      `${API_BASE_URL}/results?surveyId=${surveyId}`,
+     // userId null veya undefined değilse URL'e ekleyin
+     const url = userId !== null && userId !== undefined
+     ? `${API_BASE_URL}/results?surveyId=${surveyId}&userId=${userId}`
+     : `${API_BASE_URL}/results?surveyId=${surveyId}`;
+    const response = await fetch(url,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -30,6 +33,8 @@ export const useGetSurveyResult = (surveyId: number) => {
     data.surveyId = surveyId;
     answers.forEach((t: any) => {
       data[`q-${t.surveyQuestionId}`] = `${t.surveyQuestionOptionId}`;
+      data[`${t.surveyQuestionId}-correctQuestionIndex`] =t.correctQuestionIndex;
+      data[`${t.surveyQuestionId}-isCorrect`] = t.isCorrect;
     });
   }
  
@@ -61,11 +66,16 @@ export const useAddSurveyResult = (surveyId:number) => {
   });
 };
 
-export const useGetSurveyNameList = (parentId: number) => {
+export const useGetSurveyNameList = (parentId?: number | null, isParent?: boolean ) => {
   const { token } = useGetUserInfoFromSession();
   return useQuery("surveyNames", async () => {
-    const response = await fetch(
-      `${API_BASE_URL}/surveyNames?parentId=${parentId}`,
+
+     // parentId null veya undefined değilse URL'e ekleyin
+     const url = parentId !== null && parentId !== undefined
+     ? `${API_BASE_URL}/surveyNames?parentId=${parentId}&isParent=${isParent}`
+     : `${API_BASE_URL}/surveyNames?isParent=${isParent}`;
+
+    const response = await fetch(url,
       {
         headers: {
           Authorization: `Bearer ${token}`,

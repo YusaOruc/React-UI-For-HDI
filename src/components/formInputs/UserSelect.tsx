@@ -1,23 +1,22 @@
 import { Autocomplete } from "mui-rff"
 import { useGetSurveyNameList } from "../../stores/SurveyStore"
+import { useGetUserNameList } from "../../stores/UserStore"
 
 
-interface ISurveySelectProps {
+interface IUserSelectProps {
     required?: boolean
     disabled?: boolean
-    parentId?: number | null
     readOnly?: boolean
     label?: string
     name?: string
     size?:"medium"|"small"
-    isParent?:boolean
     
 }
 
-const SurveySelect = (props: ISurveySelectProps) => {
+const UserSelect = (props: IUserSelectProps) => {
 
-    const { name="surveyId",size,readOnly = false, required = false,isParent=false, disabled = false, parentId=null,  label = "Anket" } = props
-    const { isLoading, data = [] } = useGetSurveyNameList(parentId,isParent)
+    const { name="userId",size,readOnly = false, required = false, disabled = false,   label = "Kullanıcı" } = props
+    const { isLoading, data = [] } = useGetUserNameList()
     return (
         <Autocomplete
             label={label!}
@@ -42,4 +41,4 @@ const SurveySelect = (props: ISurveySelectProps) => {
     )
 }
 
-export default SurveySelect
+export default UserSelect

@@ -65,3 +65,22 @@ export const useAddUser = () => {
   });
 };
 
+export const useGetUserNameList = () => {
+  const { token } = useGetUserInfoFromSession();
+  return useQuery("userNames", async () => {
+    const response = await fetch(`${API_BASE_URL}/userNames`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Kullanıcı İsmi listesi alınamadı.");
+    }
+
+    return response.json();
+  });
+};
+

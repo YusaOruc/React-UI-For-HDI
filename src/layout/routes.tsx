@@ -4,6 +4,7 @@ import Report from "../views/report/Report";
 import { Home, People } from "@mui/icons-material";
 import FillSurvey from "../views/fillSurvey/FillSurvey";
 import User from "../views/user/User";
+import UserSurveyResult from "../views/userSurveyResult/UserSurveyResult";
 interface IRoute {
   id: number;
   name: string;
@@ -49,6 +50,14 @@ const navbarRoutes: IRoute[] = [
     path: "/user",
     icon: <Home />,
     page: <User />,
+    role: RoleEnum.Anketor,
+  },
+  {
+    id: 4,
+    name: "Kullanıcı Anket Sonuçları",
+    path: "/userSurveyResult",
+    icon: <Home />,
+    page: <UserSurveyResult />,
     role: RoleEnum.Anketor,
   },
 ];
