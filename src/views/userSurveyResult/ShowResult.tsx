@@ -98,6 +98,7 @@ const ShowResult = function ShowResult(props: IShowResultProps) {
     return errors;
   };
   const answers = useGetSurveyResult(surveyId, userId);
+  console.log(answers)
   const defaultOnSubmit = async (d: any) => {};
   return (
     <Container maxWidth="md">

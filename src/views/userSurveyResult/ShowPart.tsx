@@ -60,7 +60,7 @@ return (
       
     />
   <Field
-      name={`q-${questionId}-isCorrect`}
+      name={`${questionId}-isCorrect`}
       subscription={{ value: true }}
     >
       {({ input: { value } }) =>
@@ -71,7 +71,7 @@ return (
 
 
     <Field
-      name={`q-${questionId}-correctQuestionIndex`}
+      name={`${questionId}-correctQuestionIndex`}
       subscription={{ value: true }}
     >
       {({ input: { value } }) =>

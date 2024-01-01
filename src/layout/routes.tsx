@@ -53,7 +53,7 @@ const navbarRoutes: IRoute[] = [
     role: RoleEnum.Anketor,
   },
   {
-    id: 4,
+    id: 5,
     name: "Kullanıcı Anket Sonuçları",
     path: "/userSurveyResult",
     icon: <Home />,
