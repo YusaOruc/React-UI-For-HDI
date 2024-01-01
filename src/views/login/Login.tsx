@@ -8,11 +8,31 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { requiredCheck } from "../../utils/validation";
 import { Form } from "react-final-form";
 import { TextField } from "mui-rff";
-import {useLoginUser} from "../../stores/LoginStore"
+import { useLoginUser } from "../../stores/LoginStore";
+import { RoleEnum } from "../../layout/routes";
+
+const getHomePath = (role: string): string => {
+  let path = "/";
+  switch (role) {
+    case RoleEnum.Anketor: {
+      path = "/survey";
+      break;
+    }
+    case RoleEnum.StandardUser: {
+      path = "/fillSurvey";
+      break;
+    }
+    case RoleEnum.Reporting: {
+      path = "/userSurveyResult";
+      break;
+    }
+  }
+  return path;
+};
 
 const Login = () => {
   const validate = (values: any) => {
@@ -31,8 +51,8 @@ const Login = () => {
       });
       sessionStorage.setItem("token", result.token);
       sessionStorage.setItem("role", result.role);
-      navigate("/survey");
-
+      const path = getHomePath(result.role);
+      navigate(path);
       return undefined;
     } catch (e: any) {
       if (e.status === 400) {

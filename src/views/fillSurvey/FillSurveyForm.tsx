@@ -82,7 +82,6 @@ const FillSurveyForm = function FillSurveyForm(props: IFillSurveyFormProps) {
     });
 
     try {
-      console.log(surveyResults)
       if (editId) {
         await AddSurveyResult.mutateAsync(surveyResults)
         showAlert();

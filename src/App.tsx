@@ -7,7 +7,7 @@ import { useRoutePermissionCheck } from "./layout/routes";
 
 function App() {
   const hasAuthentication = useHasAuthentication();
-
+  
   const navigate = useNavigate();
   useEffect(() => {
     if (!hasAuthentication) {
