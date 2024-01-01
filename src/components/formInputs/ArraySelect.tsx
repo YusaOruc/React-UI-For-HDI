@@ -29,4 +29,22 @@ const ArraySelect = (props: ArraySelectProps) => {
     )
 }
 
+export const ListSelect = (props: ArraySelectProps) => {
+    const { required = false, disabled = false, name, options, label, loading = false, size = "medium" } = props
+
+    return (
+        <Autocomplete
+            label={label}
+            name={name}
+            options={options}
+            getOptionValue={loading ? undefined : (option:any) => option.id}
+            getOptionLabel={(option:any) => option.name ?? "Yükleniyor..."}
+            required={required}
+            disabled={disabled}
+            loading={loading}
+            size={size}
+        />
+    )
+}
+
 export default ArraySelect
