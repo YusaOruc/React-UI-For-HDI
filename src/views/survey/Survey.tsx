@@ -51,11 +51,6 @@ const Survey = () => {
       <PageCircularProgress/>
     );
   }
-  if (data.length===0) {
-    return (
-      <ListNotFound/>
-    );
-  }
   return (
     <Container maxWidth="md" sx={{ p: 5 }}>
       <Paper sx={{ p: 2 }}>
@@ -63,7 +58,7 @@ const Survey = () => {
           Anket Ekle
         </Button>
 
-        <List>
+       { data.length>0?<List>
           {data.map((t: any, index: any) => 
             <SurveyItem
               key={t.id}
@@ -73,7 +68,7 @@ const Survey = () => {
               handleEdit={handleEdit}
             />
           )}
-        </List>
+        </List>: <ListNotFound/>}
         <PageModal
           title="Anket"
           backgroundColor={theme.palette.grey[100]}

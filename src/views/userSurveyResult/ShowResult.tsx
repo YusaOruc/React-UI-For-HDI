@@ -54,7 +54,7 @@ const QuestionItem = function QuestionItem(props: IQuestionItemProps) {
       </Box>
 
       <Field
-        name={`${questionId}-correctQuestionIndex`}
+        name={`${questionId}-correctQuestionOptionIndex`}
         subscription={{ value: true }}
       >
         {({ input: { value } }) => (

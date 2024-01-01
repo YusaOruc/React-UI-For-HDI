@@ -159,7 +159,7 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                           </Grid>
                           <Grid item xs={12} sm={2}>
                             <ListSelect
-                              name={`${surveyQuestionName}.correctQuestionIndex`}
+                              name={`${surveyQuestionName}.correctQuestionOptionIndex`}
                               label="Doğru Cevap"
                               options={[
                                 { id: 1, name: "A" },
@@ -326,7 +326,7 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                                       </Grid>
                                       <Grid item xs={12} sm={2}>
                                         <ListSelect
-                                          name={`${surveyQuestionName}.correctQuestionIndex`}
+                                          name={`${surveyQuestionName}.correctQuestionOptionIndex`}
                                           label="Doğru Cevap"
                                           options={[
                                             { id: 1, name: "A" },

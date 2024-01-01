@@ -33,7 +33,7 @@ export const useGetSurveyResult = (surveyId: number,userId?:number) => {
     data.surveyId = surveyId;
     answers.forEach((t: any) => {
       data[`q-${t.surveyQuestionId}`] = `${t.surveyQuestionOptionId}`;
-      data[`${t.surveyQuestionId}-correctQuestionIndex`] =t.correctQuestionIndex;
+      data[`${t.surveyQuestionId}-correctQuestionOptionIndex`] =t.correctQuestionOptionIndex;
       data[`${t.surveyQuestionId}-isCorrect`] = t.isCorrect;
     });
   }
@@ -105,7 +105,7 @@ export const useGetSurveyList = () => {
     }
 
     return response.json();
-  });
+  },{ refetchOnWindowFocus:false});
 };
 
 export const useGetSurvey = (id: number, shouldFetch: boolean = true) => {
