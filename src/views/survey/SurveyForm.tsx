@@ -23,6 +23,9 @@ import {
 } from "../../stores/SurveyStore";
 import SurveySelect from "../../components/formInputs/SurveySelect";
 import useAlertState from "../../components/alerts/useAlertState";
+import ArraySelect, {
+  ListSelect,
+} from "../../components/formInputs/ArraySelect";
 
 interface ISurveyEditFormProps {
   disabled?: boolean;
@@ -142,15 +145,35 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                             <Close />
                           </IconButton>
                         </Box>
-                        <TextField
-                          name={`${surveyQuestionName}.title`}
-                          type="text"
-                          label={"Soru"}
-                          fullWidth
-                          required
-                          size="small"
-                          disabled={disabled}
-                        />
+                        <Grid container spacing={1}>
+                          <Grid item xs={12} sm={10}>
+                            <TextField
+                              name={`${surveyQuestionName}.title`}
+                              type="text"
+                              label={"Soru"}
+                              fullWidth
+                              required
+                              size="small"
+                              disabled={disabled}
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={2}>
+                            <ListSelect
+                              name={`${surveyQuestionName}.correctQuestionIndex`}
+                              label="Doğru Cevap"
+                              options={[
+                                { id: 1, name: "A" },
+                                { id: 2, name: "B" },
+                                { id: 3, name: "C" },
+                                { id: 4, name: "D" },
+                                { id: 5, name: "E" },
+                              ]}
+                              required
+                              size="small"
+                              disabled={disabled}
+                            />
+                          </Grid>
+                        </Grid>
                         <Box>
                           <Button
                             size="small"
@@ -289,16 +312,35 @@ const SurveyForm = function SurveyEditForm(props: ISurveyEditFormProps) {
                                         <Close />
                                       </IconButton>
                                     </Box>
-                                    <TextField
-                                      name={`${surveyQuestionName}.title`}
-                                      type="text"
-                                      label={"Soru"}
-                                      fullWidth
-                                      required
-                                      size="small"
-                                      disabled={disabled}
-                                    />
-
+                                    <Grid container spacing={1}>
+                                      <Grid item xs={12} sm={10}>
+                                        <TextField
+                                          name={`${surveyQuestionName}.title`}
+                                          type="text"
+                                          label={"Soru"}
+                                          fullWidth
+                                          required
+                                          size="small"
+                                          disabled={disabled}
+                                        />
+                                      </Grid>
+                                      <Grid item xs={12} sm={2}>
+                                        <ListSelect
+                                          name={`${surveyQuestionName}.correctQuestionIndex`}
+                                          label="Doğru Cevap"
+                                          options={[
+                                            { id: 1, name: "A" },
+                                            { id: 2, name: "B" },
+                                            { id: 3, name: "C" },
+                                            { id: 4, name: "D" },
+                                            { id: 5, name: "E" },
+                                          ]}
+                                          required
+                                          size="small"
+                                          disabled={disabled}
+                                        />
+                                      </Grid>
+                                    </Grid>
                                     <Box>
                                       <Button
                                         size="small"
