@@ -49,10 +49,14 @@ const Login = () => {
         username: d.email,
         password: d.password,
       });
-      sessionStorage.setItem("token", result.token);
-      sessionStorage.setItem("role", result.role);
-      const path = getHomePath(result.role);
-      navigate(path);
+      if (result.token === null) {
+        navigate("/login");
+      } else {
+        sessionStorage.setItem("token", result.token);
+        sessionStorage.setItem("role", result.role);
+        const path = getHomePath(result.role);
+        navigate(path);
+      }
       return undefined;
     } catch (e: any) {
       if (e.status === 400) {
